@@ -37,13 +37,17 @@ const todo = props.todo;
 export default Home
 
 export const getServerSideProps = async () => {
+  const stmt = process.env.DB.prepare("select * from posts;");
+  const out = await stmt.all()
+
   const response = await fetch('https://jsonplaceholder.typicode.com/todos');
   const todo: Todo[] = await response.json();
   const name = process.env.APP_NAME
   return {
     props: {
       todo,
-      name
+      name,
+      posts: out.results ?? []
     },
   };
 };
