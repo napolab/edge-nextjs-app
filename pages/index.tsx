@@ -11,7 +11,7 @@ type Todo = {
 };
 
 const Home: NextPage<Props> = (props) =>  {
-const todo: Todo[] = props.todo;
+const todo = props.todo;
 
   return (
     <div >
@@ -21,8 +21,8 @@ const todo: Todo[] = props.todo;
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main >
-      <h1>Todo</h1>
+      <main>
+      <h1>{props.name}</h1>
       <ul>
         {todo.map((item) => (
           <li key={item.id}>{item.title}</li>
@@ -36,12 +36,14 @@ const todo: Todo[] = props.todo;
 
 export default Home
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps = async () => {
   const response = await fetch('https://jsonplaceholder.typicode.com/todos');
-  const todo = await response.json();
+  const todo: Todo[] = await response.json();
+  const name = process.env.APP_NAME
   return {
     props: {
       todo,
+      name
     },
   };
 };
